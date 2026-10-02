@@ -13,6 +13,8 @@ export interface BuildInput {
   cover?: StoredImage;
   now?: Date;
   identifier?: string;
+  /** File name chosen by the user (extension optional). */
+  fileName?: string;
 }
 
 export interface BuildResult {
@@ -34,7 +36,30 @@ export function orderReadings(readings: Reading[]): { ordered: Reading[]; groupe
   return { ordered, grouped };
 }
 
-export function epubFileName(settings: BundleSettings): string {
+/**
+ * Makes a file name safe everywhere: no characters Windows/macOS/e-readers reject,
+ * and typographic punctuation and accents turned into plain equivalents (some
+ * browsers refuse downloads whose names contain them).
+ */
+export function safeFileBase(name: string): string {
+  return name
+    .replace(/\.(kepub\.)?epub$/i, '')
+    .replace(/[\u2012-\u2015\u2212]/g, '-')
+    .replace(/[\u2018\u2019\u201b\u2032]/g, "'")
+    .replace(/[\u201c\u201d\u201e\u2033]/g, '')
+    .replace(/\u2026/g, '...')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\\/:*?"<>|\u0000-\u001f]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/^[\s.]+|[\s.]+$/g, '')
+    .slice(0, 120);
+}
+
+export function epubFileName(settings: BundleSettings, chosen?: string): string {
+  const ext = settings.kepub ? '.kepub.epub' : '.epub';
+  const picked = chosen !== undefined ? safeFileBase(chosen) : '';
+  if (picked) return picked + ext;
   const base =
     settings.title
       .normalize('NFKD')
@@ -42,7 +67,7 @@ export function epubFileName(settings: BundleSettings): string {
       .replace(/[^A-Za-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
       .slice(0, 80) || 'readings';
-  return `${base}${settings.kepub ? '.kepub.epub' : '.epub'}`;
+  return base + ext;
 }
 
 const ext = (mime: string) => (mime === 'image/png' ? 'png' : 'jpg');
@@ -166,7 +191,7 @@ export async function buildEpub(input: BuildInput, sink: ZipSink): Promise<Build
   await add('OEBPS/content.opf', opfDocument(settings, manifest, spine, identifier, lang, now));
 
   await zip.finish();
-  return { fileName: epubFileName(settings), bytes: zip.bytesWritten, files: written };
+  return { fileName: epubFileName(settings, input.fileName), bytes: zip.bytesWritten, files: written };
 }
 
 function titlePage(

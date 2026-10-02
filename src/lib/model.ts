@@ -44,6 +44,8 @@ export interface Reading {
   course: string;
   fileName: string;
   fileType: 'pdf' | 'image' | 'docx';
+  /** Identifies the source file(s) (name, size, date) so the same file isn't added twice. */
+  sourceKey?: string;
   status: ReadingStatus;
   /** 0..1 */
   progress: number;
@@ -68,6 +70,8 @@ export interface BundleSettings {
   sectionsInToc: boolean;
   /** Output a Kobo-optimised .kepub.epub instead of a plain .epub. */
   kepub: boolean;
+  /** File name (without extension) last chosen when saving this bundle. */
+  fileName?: string;
 }
 
 export interface Bundle {

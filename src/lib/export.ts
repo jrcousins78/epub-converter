@@ -23,13 +23,13 @@ type SavePicker = (opts: { suggestedName: string; types: { description: string; 
   createWritable(): Promise<{ write(d: Uint8Array): Promise<void>; close(): Promise<void>; abort(): Promise<void> }>;
 }>;
 
-export async function exportEpub(bundle: Bundle): Promise<{ fileName: string; bytes: number } | undefined> {
-  const name = epubFileName(bundle.settings);
+export async function exportEpub(bundle: Bundle, fileName?: string): Promise<{ fileName: string; bytes: number } | undefined> {
+  const name = epubFileName(bundle.settings, fileName);
   const picker = (window as unknown as { showSaveFilePicker?: SavePicker }).showSaveFilePicker;
   const big = (await estimateSize(bundle)) > STREAM_THRESHOLD;
   const done = bundle.readings.filter((r) => r.status === 'done');
   const cover = await makeCover(bundle.settings, done);
-  const input = { settings: bundle.settings, readings: done, getImage, cover };
+  const input = { settings: bundle.settings, readings: done, getImage, cover, fileName };
 
   if (big && picker) {
     let handle;

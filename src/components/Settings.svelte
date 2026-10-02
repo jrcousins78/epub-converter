@@ -1,5 +1,6 @@
 <script lang="ts">
   import { app, formatBytes } from '../lib/app.svelte';
+  import { delight } from '../lib/delight.svelte';
   import { storageUse } from '../lib/storage';
   import { icons } from './icons';
 
@@ -34,9 +35,11 @@
     void storageUse().then((u) => (used = u ? formatBytes(u.usage) : ''));
   });
 
+  const canVibrate = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
+
   async function newWeek() {
     if (confirm('Start a new week? This removes all readings from this page. EPUBs you already downloaded are not affected.')) {
-      await app.clearAll();
+      await app.startOver();
       onclose();
     }
   }
@@ -97,6 +100,38 @@
       >
     </span>
     <input type="checkbox" class="switch" checked={s.kepub} onchange={(e) => app.updateSettings({ kepub: (e.target as HTMLInputElement).checked })} />
+  </label>
+
+  <label class="row">
+    <span>
+      <span class="name">Playful touches</span>
+      <span class="help">Little animations when things happen, and the occasional surprise.</span>
+    </span>
+    <input
+      type="checkbox"
+      class="switch"
+      checked={delight.prefs.playful}
+      onchange={(e) => delight.setPref('playful', (e.target as HTMLInputElement).checked)}
+    />
+  </label>
+
+  <label class="row">
+    <span>
+      <span class="name">Vibration</span>
+      <span class="help"
+        >A tiny tap when a reading finishes or your book is ready.{canVibrate ? '' : ' Not supported in this browser (iPhones don’t allow it).'}</span
+      >
+    </span>
+    <input
+      type="checkbox"
+      class="switch"
+      checked={delight.prefs.haptics}
+      disabled={!canVibrate}
+      onchange={(e) => {
+        delight.setPref('haptics', (e.target as HTMLInputElement).checked);
+        delight.tap('light');
+      }}
+    />
   </label>
 
   <div class="row">
@@ -185,15 +220,29 @@
     left: 0.2rem;
     width: 1rem;
     height: 1rem;
-    border-radius: 50%;
+    border-radius: 999px;
     background: #fff;
-    transition: transform 0.15s;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+    transition:
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      width 0.2s ease;
+  }
+  /* The knob stretches while pressed, then springs across. */
+  .switch:active::after {
+    width: 1.3rem;
   }
   .switch:checked {
     background: var(--accent);
   }
   .switch:checked::after {
     transform: translateX(1rem);
+  }
+  .switch:checked:active::after {
+    transform: translateX(0.7rem);
+  }
+  .switch:disabled {
+    opacity: 0.4;
+    cursor: default;
   }
   .privacy {
     color: var(--muted);

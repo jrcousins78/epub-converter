@@ -46,10 +46,10 @@ export async function loadBundle(): Promise<Bundle | undefined> {
   return get<Bundle>('bundle:current', store);
 }
 
-/** Removes everything except what the given bundle still references. */
-export async function collectGarbage(bundle: Bundle): Promise<void> {
+/** Removes everything except what the given readings (e.g. the bundle's) still reference. */
+export async function collectGarbage(readings: Bundle['readings']): Promise<void> {
   const live = new Set<string>();
-  for (const r of bundle.readings) {
+  for (const r of readings) {
     live.add(`src:${r.id}`);
     for (const p of r.pages) if (p.preview) live.add(`img:${p.preview}`);
     for (const b of r.blocks) if (b.kind === 'figure') live.add(`img:${b.image}`);
