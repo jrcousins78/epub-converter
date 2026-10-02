@@ -1,0 +1,40 @@
+{
+  "name": "epub-converter",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Turn a week's readings (PDFs, scans, photos, Word docs) into one EPUB for Kobo or Boox. Runs entirely in the browser.",
+  "scripts": {
+    "assets": "node scripts/copy-assets.mjs",
+    "predev": "node scripts/copy-assets.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/copy-assets.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "heic2any": "^0.0.4",
+    "idb-keyval": "^6.3.0",
+    "mammoth": "^1.13.0",
+    "pdfjs-dist": "^6.3.289",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@types/node": "^26.6.4",
+    "epubcheck-static": "^4.0.0-v5.3.0",
+    "jszip": "^3.10.2",
+    "pdf-lib": "^1.17.1",
+    "svelte": "^5.57.1",
+    "svelte-check": "^4.7.6",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}

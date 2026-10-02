@@ -1,0 +1,12 @@
+node_modules/
+dist/
+public/vendor/
+test-results/
+playwright-report/
+.vite/
+*.log
+.DS_Store
+# Never commit real class readings: this repo is public.
+samples/
+*.epub
+!tests/fixtures/**/*.epub
