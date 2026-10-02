@@ -34,14 +34,6 @@ Everything runs in your browser. Your readings are never uploaded anywhere.
 - Take photos flat-on, in good light, with the whole page in frame.
 - If your readings aren't in English, choose the language in Settings before adding them.
 
-## One-time setup to publish the site
-
-The repo must be **public** to use GitHub Pages on a free account.
-
-1. Merge this branch into `main`.
-2. In the repo, go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
-3. The *Deploy to GitHub Pages* workflow runs on every push to `main`. The site appears at `https://<your-user>.github.io/epub-converter/`.
-
 ## Limits
 
 - **Time:** OCR takes about 1–3 seconds per scanned page on a laptop. 25 readings of 20 scanned pages is roughly 10–25 minutes. Text PDFs and Word files are near-instant. Phones work, but slowly.
