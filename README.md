@@ -17,6 +17,9 @@ Everything runs in your browser. Your readings are never uploaded anywhere.
 - **Weekly bundle.** There's no limit on the number of readings. Give each one a course and the contents are grouped by course, then reading, then section.
 - **Optional review.** View each scanned page next to its recognised text and fix typos, mark headings, or remove junk. Pages the OCR wasn't sure about are flagged. Rotate and re-run OCR if a photo was sideways.
 - **Autosave.** Work in progress is kept in your browser, so closing the tab doesn't lose it.
+- **Tidy lists.** The same file is never added twice, even if it was renamed or downloaded again. Tick several readings (shift-click for a range, or Ctrl/Cmd+A) to remove them or set their course in one go. Removals can be undone.
+- **Name your file** when you build the EPUB, and use **Start over** to clear the list for next week.
+- **Playful touches.** Small animations confirm that things happened: a ripple when files land, a check mark that draws itself, a little book when your EPUB is ready, and the occasional surprise doodle or milestone. Android phones also get a tiny vibration. Both can be turned off in Settings, and animations follow your system's reduce-motion setting.
 - **Kobo option.** Settings can output a `.kepub.epub` for faster page turns. Kobo's own documentation says sideloaded KEPUBs may disable bookmarks and notes, so try one first. Leave it off for Boox.
 
 ## Using it

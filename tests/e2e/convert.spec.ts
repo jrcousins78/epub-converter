@@ -63,8 +63,13 @@ test('converts a week of mixed readings into one valid EPUB', async ({ page }) =
   await expect(page.getByText(/Page 21/).first()).toBeVisible();
   await page.getByRole('button', { name: 'Done' }).click();
 
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('build').click()]);
-  expect(download.suggestedFilename()).toBe('SOC-101-Week-1.epub');
+  // Build: the save dialog suggests a name, which can be changed.
+  await page.getByTestId('build').click();
+  await expect(page.getByTestId('file-name')).toHaveValue('SOC-101-Week-1');
+  await page.getByTestId('file-name').fill('SOC 101 – Week 1 (Mill)');
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('save').click()]);
+  expect(download.suggestedFilename()).toBe('SOC 101 - Week 1 (Mill).epub');
+  await expect(page.getByTestId('summary')).toContainText('Saved SOC 101 - Week 1 (Mill).epub');
   mkdirSync('test-results/epubs', { recursive: true });
   const path = 'test-results/epubs/e2e-week.epub';
   await download.saveAs(path);
