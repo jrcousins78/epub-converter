@@ -30,9 +30,9 @@
   }
 
   function drop(e: DragEvent) {
-    // Handled here; stop the page-wide drop handler from adding the same files again.
+    // Handled here. preventDefault marks it as handled, so the page-wide drop
+    // handler (which still runs, to hide its outline) doesn't add the files again.
     e.preventDefault();
-    e.stopPropagation();
     over = false;
     const files = Array.from(e.dataTransfer?.files ?? []);
     if (files.length) {
