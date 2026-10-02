@@ -134,6 +134,7 @@
   ondragleave={(e) => {
     if (!e.relatedTarget) pageDrag = false;
   }}
+  ondragend={() => (pageDrag = false)}
   ondrop={pageDrop}
 />
 

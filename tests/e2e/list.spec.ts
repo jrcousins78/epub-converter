@@ -29,6 +29,8 @@ test('dropping files adds each one once, and dropping them again does not duplic
   await expect(page.getByTestId('reading')).toHaveCount(2);
   // Handled exactly once: no "already in the list" message for a single drop.
   await expect(page.getByText('Already in the list')).toHaveCount(0);
+  // The page-wide "drop here" outline goes away after the drop.
+  await expect(page.locator('.app')).not.toHaveClass(/page-drag/);
 
   // Same files again, on the drop zone and on the page itself.
   await dropFiles(page, '[data-testid="drop-zone"]', [fx('mill-text.pdf')]);
